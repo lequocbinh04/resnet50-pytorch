@@ -43,7 +43,7 @@ def train_model(model, criterion, optimizer, num_epochs=3):
 
       epoch_loss = running_loss / len(image_datasets[phase])
       epoch_acc = running_corrects.double() / len(image_datasets[phase])
-
+      torch.save(model.state_dict(), args.output + '/model_'+str(epoch+1)+'.pth')
       print('{} loss: {:.4f}, acc: {:.4f}'.format(phase,
                                                   epoch_loss,
                                                   epoch_acc))
@@ -87,7 +87,7 @@ if __name__ == "__main__":
       'train': 
       datasets.ImageFolder(train_path, data_transforms['train']),
       'val': 
-      datasets.ImageFolder(valid_path, data_transforms['train'])
+      datasets.ImageFolder(valid_path, data_transforms['val'])
   }
 
   dataloaders = {
@@ -97,7 +97,7 @@ if __name__ == "__main__":
                                   shuffle=True,
                                   num_workers=0),  
       'val':
-      torch.utils.data.DataLoader(image_datasets['train'],
+      torch.utils.data.DataLoader(image_datasets['val'],
                                   batch_size=4,
                                   shuffle=False,
                                   num_workers=0)
