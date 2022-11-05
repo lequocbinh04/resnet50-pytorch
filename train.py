@@ -43,7 +43,7 @@ def train_model(model, criterion, optimizer, num_epochs=3):
 
       epoch_loss = running_loss / len(image_datasets[phase])
       epoch_acc = running_corrects.double() / len(image_datasets[phase])
-      torch.save(model.state_dict(), args.output + '/model_'+str(epoch+1)+'.pth')
+      if phase == "train": torch.save(model.state_dict(), args.output + '/model_'+str(epoch+1)+'.pth')
       print('{} loss: {:.4f}, acc: {:.4f}'.format(phase,
                                                   epoch_loss,
                                                   epoch_acc))
@@ -72,6 +72,8 @@ if __name__ == "__main__":
           # transforms.RandomAffine(0, shear=5, scale=(0.8,1.2)),
           # transforms.ColorJitter(brightness=(0.5, 1.5), contrast=(0.8, 1.5), saturation=0),
           transforms.RandomHorizontalFlip(),
+          transforms.RandomVerticalFlip(),
+          transforms.RandomRotation((30,70)),
           transforms.ToTensor(),
           normalize
       ]),
@@ -122,5 +124,19 @@ if __name__ == "__main__":
   # Decay LR by a factor of 0.1 every 7 epochsScratch
   # Final Thoughts and Where to Go Next
   exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
-  model_trained = train_model(model_ft, criterion, optimizer_ft, num_epochs=5)
+  model_trained = train_model(model_ft, criterion, optimizer_ft, num_epochs=3)
   torch.save(model_trained.state_dict(), args.output + '/model_'+str(time.time() % 1000)+'.pth')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
